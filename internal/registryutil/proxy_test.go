@@ -125,7 +125,7 @@ func TestProxy_FetchReference(t *testing.T) {
 	if !exists {
 		t.Errorf("Proxy.Exists() = %v, want %v", exists, true)
 	}
-	rc, err = s.Fetch(ctx, desc)
+	rc, err = s.Fetch(ctx, desc, 0, 0)
 	if err != nil {
 		t.Fatal("Proxy.Fetch() error =", err)
 	}

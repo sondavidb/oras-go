@@ -85,7 +85,7 @@ func TestReadOnlyStorage_Fetch(t *testing.T) {
 	ctx := context.Background()
 
 	// test fetch
-	rc, err := s.Fetch(ctx, desc)
+	rc, err := s.Fetch(ctx, desc, 0, 0)
 	if err != nil {
 		t.Fatal("ReadOnlyStorage.Fetch() error =", err)
 	}
@@ -104,14 +104,14 @@ func TestReadOnlyStorage_Fetch(t *testing.T) {
 	// test not found
 	anotherBlob := []byte("whatever")
 	desc = content.NewDescriptorFromBytes("", anotherBlob)
-	_, err = s.Fetch(ctx, desc)
+	_, err = s.Fetch(ctx, desc, 0, 0)
 	if !errors.Is(err, errdef.ErrNotFound) {
 		t.Fatalf("ReadOnlyStorage.Fetch() error = %v, wantErr %v", err, errdef.ErrNotFound)
 	}
 
 	// test invalid digest
 	desc = ocispec.Descriptor{Digest: "not a digest"}
-	_, err = s.Fetch(ctx, desc)
+	_, err = s.Fetch(ctx, desc, 0, 0)
 	if err == nil {
 		t.Fatalf("ReadOnlyStorage.Fetch() error = %v, wantErr %v", err, true)
 	}
@@ -144,7 +144,7 @@ func TestReadOnlyStorage_DirFS(t *testing.T) {
 	}
 
 	// test Fetch
-	rc, err := s.Fetch(ctx, desc)
+	rc, err := s.Fetch(ctx, desc, 0, 0)
 	if err != nil {
 		t.Fatal("ReadOnlyStorage.Fetch() error =", err)
 	}
@@ -182,7 +182,7 @@ func TestReadOnlyStorage_TarFS(t *testing.T) {
 	}
 
 	// test Fetch
-	rc, err := s.Fetch(ctx, desc)
+	rc, err := s.Fetch(ctx, desc, 0, 0)
 	if err != nil {
 		t.Fatal("ReadOnlyStorage.Fetch() error =", err)
 	}
@@ -210,7 +210,7 @@ func TestReadOnlyStorage_TarFS(t *testing.T) {
 	}
 
 	// test Fetch against a non-existing content
-	_, err = s.Fetch(ctx, desc)
+	_, err = s.Fetch(ctx, desc, 0, 0)
 	if want := errdef.ErrNotFound; !errors.Is(err, want) {
 		t.Errorf("ReadOnlyStorage.Fetch() error = %v, wantErr %v", err, want)
 	}

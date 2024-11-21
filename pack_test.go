@@ -53,7 +53,7 @@ func Test_Pack_Artifact_NoOption(t *testing.T) {
 
 	// verify blobs
 	var manifest spec.Artifact
-	rc, err := s.Fetch(ctx, manifestDesc)
+	rc, err := s.Fetch(ctx, manifestDesc, 0, 0)
 	if err != nil {
 		t.Fatal("Store.Fetch() error =", err)
 	}
@@ -150,7 +150,7 @@ func Test_Pack_Artifact_WithOptions(t *testing.T) {
 	}
 
 	// verify manifest
-	rc, err := s.Fetch(ctx, manifestDesc)
+	rc, err := s.Fetch(ctx, manifestDesc, 0, 0)
 	if err != nil {
 		t.Fatal("Store.Fetch() error =", err)
 	}
@@ -187,7 +187,7 @@ func Test_Pack_Artifact_NoBlob(t *testing.T) {
 	}
 
 	var manifest spec.Artifact
-	rc, err := s.Fetch(ctx, manifestDesc)
+	rc, err := s.Fetch(ctx, manifestDesc, 0, 0)
 	if err != nil {
 		t.Fatal("Store.Fetch() error =", err)
 	}
@@ -215,7 +215,7 @@ func Test_Pack_Artifact_NoArtifactType(t *testing.T) {
 	}
 
 	var manifest spec.Artifact
-	rc, err := s.Fetch(ctx, manifestDesc)
+	rc, err := s.Fetch(ctx, manifestDesc, 0, 0)
 	if err != nil {
 		t.Fatal("Store.Fetch() error =", err)
 	}
@@ -269,7 +269,7 @@ func Test_Pack_ImageV1_1_RC2(t *testing.T) {
 	}
 
 	var manifest ocispec.Manifest
-	rc, err := s.Fetch(ctx, manifestDesc)
+	rc, err := s.Fetch(ctx, manifestDesc, 0, 0)
 	if err != nil {
 		t.Fatal("Store.Fetch() error =", err)
 	}
@@ -370,7 +370,7 @@ func Test_Pack_ImageV1_1_RC2_WithOptions(t *testing.T) {
 		t.Fatal("failed to marshal manifest:", err)
 	}
 
-	rc, err := s.Fetch(ctx, manifestDesc)
+	rc, err := s.Fetch(ctx, manifestDesc, 0, 0)
 	if err != nil {
 		t.Fatal("Store.Fetch() error =", err)
 	}
@@ -423,7 +423,7 @@ func Test_Pack_ImageV1_1_RC2_WithOptions(t *testing.T) {
 		t.Fatal("failed to marshal manifest:", err)
 	}
 
-	rc, err = s.Fetch(ctx, manifestDesc)
+	rc, err = s.Fetch(ctx, manifestDesc, 0, 0)
 	if err != nil {
 		t.Fatal("Store.Fetch() error =", err)
 	}
@@ -458,7 +458,7 @@ func Test_Pack_ImageV1_1_RC2_NoArtifactType(t *testing.T) {
 	}
 
 	var manifest ocispec.Manifest
-	rc, err := s.Fetch(ctx, manifestDesc)
+	rc, err := s.Fetch(ctx, manifestDesc, 0, 0)
 	if err != nil {
 		t.Fatal("Store.Fetch() error =", err)
 	}
@@ -489,7 +489,7 @@ func Test_Pack_ImageV1_1_RC2_NoLayer(t *testing.T) {
 	}
 
 	var manifest ocispec.Manifest
-	rc, err := s.Fetch(ctx, manifestDesc)
+	rc, err := s.Fetch(ctx, manifestDesc, 0, 0)
 	if err != nil {
 		t.Fatal("Store.Fetch() error =", err)
 	}
@@ -535,7 +535,7 @@ func Test_PackManifest_ImageV1_0(t *testing.T) {
 	}
 
 	var manifest ocispec.Manifest
-	rc, err := s.Fetch(ctx, manifestDesc)
+	rc, err := s.Fetch(ctx, manifestDesc, 0, 0)
 	if err != nil {
 		t.Fatal("Store.Fetch() error =", err)
 	}
@@ -629,7 +629,7 @@ func Test_PackManifest_ImageV1_0_WithOptions(t *testing.T) {
 		t.Fatal("failed to marshal manifest:", err)
 	}
 
-	rc, err := s.Fetch(ctx, manifestDesc)
+	rc, err := s.Fetch(ctx, manifestDesc, 0, 0)
 	if err != nil {
 		t.Fatal("Store.Fetch() error =", err)
 	}
@@ -680,7 +680,7 @@ func Test_PackManifest_ImageV1_0_WithOptions(t *testing.T) {
 		t.Fatal("failed to marshal manifest:", err)
 	}
 
-	rc, err = s.Fetch(ctx, manifestDesc)
+	rc, err = s.Fetch(ctx, manifestDesc, 0, 0)
 	if err != nil {
 		t.Fatal("Store.Fetch() error =", err)
 	}
@@ -738,7 +738,7 @@ func Test_PackManifest_ImageV1_0_NoArtifactType(t *testing.T) {
 	}
 
 	var manifest ocispec.Manifest
-	rc, err := s.Fetch(ctx, manifestDesc)
+	rc, err := s.Fetch(ctx, manifestDesc, 0, 0)
 	if err != nil {
 		t.Fatal("Store.Fetch() error =", err)
 	}
@@ -813,7 +813,7 @@ func Test_PackManifest_ImageV1_1(t *testing.T) {
 	}
 
 	var manifest ocispec.Manifest
-	rc, err := s.Fetch(ctx, manifestDesc)
+	rc, err := s.Fetch(ctx, manifestDesc, 0, 0)
 	if err != nil {
 		t.Fatal("Store.Fetch() error =", err)
 	}
@@ -884,7 +884,7 @@ func Test_PackManifest_ImageV1_1_WithOptions(t *testing.T) {
 		t.Fatal("failed to marshal manifest:", err)
 	}
 
-	rc, err := s.Fetch(ctx, manifestDesc)
+	rc, err := s.Fetch(ctx, manifestDesc, 0, 0)
 	if err != nil {
 		t.Fatal("Store.Fetch() error =", err)
 	}
@@ -936,7 +936,7 @@ func Test_PackManifest_ImageV1_1_WithOptions(t *testing.T) {
 		t.Fatal("failed to marshal manifest:", err)
 	}
 
-	rc, err = s.Fetch(ctx, manifestDesc)
+	rc, err = s.Fetch(ctx, manifestDesc, 0, 0)
 	if err != nil {
 		t.Fatal("Store.Fetch() error =", err)
 	}
@@ -990,7 +990,7 @@ func Test_PackManifest_ImageV1_1_WithOptions(t *testing.T) {
 		t.Fatal("failed to marshal manifest:", err)
 	}
 
-	rc, err = s.Fetch(ctx, manifestDesc)
+	rc, err = s.Fetch(ctx, manifestDesc, 0, 0)
 	if err != nil {
 		t.Fatal("Store.Fetch() error =", err)
 	}

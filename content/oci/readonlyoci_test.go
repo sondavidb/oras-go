@@ -184,7 +184,7 @@ func TestReadOnlyStore(t *testing.T) {
 	for i := range blobs {
 		eg.Go(func(i int) func() error {
 			return func() error {
-				rc, err := s.Fetch(egCtx, descs[i])
+				rc, err := s.Fetch(egCtx, descs[i], 0, 0)
 				if err != nil {
 					return fmt.Errorf("ReadOnlyStore.Fetch(%d) error = %v", i, err)
 				}
@@ -363,7 +363,7 @@ func TestReadOnlyStore_DirFS(t *testing.T) {
 	for i := range blobs {
 		eg.Go(func(i int) func() error {
 			return func() error {
-				rc, err := s.Fetch(egCtx, descs[i])
+				rc, err := s.Fetch(egCtx, descs[i], 0, 0)
 				if err != nil {
 					return fmt.Errorf("ReadOnlyStore.Fetch(%d) error = %v", i, err)
 				}

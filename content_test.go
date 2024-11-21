@@ -1628,7 +1628,7 @@ func TestPushBytes_Memory(t *testing.T) {
 	if !reflect.DeepEqual(gotDesc, descTest) {
 		t.Errorf("oras.PushBytes() = %v, want %v", gotDesc, descTest)
 	}
-	rc, err := s.Fetch(ctx, gotDesc)
+	rc, err := s.Fetch(ctx, gotDesc, 0, 0)
 	if err != nil {
 		t.Fatal("Memory.Fetch() error =", err)
 	}
@@ -1658,7 +1658,7 @@ func TestPushBytes_Memory(t *testing.T) {
 	if !reflect.DeepEqual(gotDesc, descOctet) {
 		t.Errorf("oras.PushBytes() = %v, want %v", gotDesc, descOctet)
 	}
-	rc, err = s.Fetch(ctx, gotDesc)
+	rc, err = s.Fetch(ctx, gotDesc, 0, 0)
 	if err != nil {
 		t.Fatal("Memory.Fetch() error =", err)
 	}
@@ -1682,7 +1682,7 @@ func TestPushBytes_Memory(t *testing.T) {
 	if !reflect.DeepEqual(gotDesc, descEmpty) {
 		t.Errorf("oras.PushBytes() = %v, want %v", gotDesc, descEmpty)
 	}
-	rc, err = s.Fetch(ctx, gotDesc)
+	rc, err = s.Fetch(ctx, gotDesc, 0, 0)
 	if err != nil {
 		t.Fatal("Memory.Fetch() error =", err)
 	}
@@ -1829,7 +1829,7 @@ func TestTagBytesN_Memory(t *testing.T) {
 	if !reflect.DeepEqual(gotDesc, descTest) {
 		t.Errorf("oras.TagBytes() = %v, want %v", gotDesc, descTest)
 	}
-	rc, err := s.Fetch(ctx, gotDesc)
+	rc, err := s.Fetch(ctx, gotDesc, 0, 0)
 	if err != nil {
 		t.Fatal("Memory.Fetch() error =", err)
 	}
@@ -1863,7 +1863,7 @@ func TestTagBytesN_Memory(t *testing.T) {
 			t.Fatalf("oras.PushBytes() = %v, want %v", gotDesc, descTest)
 		}
 	}
-	rc, err = s.Fetch(ctx, gotDesc)
+	rc, err = s.Fetch(ctx, gotDesc, 0, 0)
 	if err != nil {
 		t.Fatal("Memory.Fetch() error =", err)
 	}
@@ -1896,7 +1896,7 @@ func TestTagBytesN_Memory(t *testing.T) {
 			t.Fatalf("oras.PushBytes() = %v, want %v", gotDesc, descOctet)
 		}
 	}
-	rc, err = s.Fetch(ctx, gotDesc)
+	rc, err = s.Fetch(ctx, gotDesc, 0, 0)
 	if err != nil {
 		t.Fatal("Memory.Fetch() error =", err)
 	}
@@ -1929,7 +1929,7 @@ func TestTagBytesN_Memory(t *testing.T) {
 			t.Fatalf("oras.TagBytes() = %v, want %v", gotDesc, descEmpty)
 		}
 	}
-	rc, err = s.Fetch(ctx, gotDesc)
+	rc, err = s.Fetch(ctx, gotDesc, 0, 0)
 	if err != nil {
 		t.Fatal("Memory.Fetch() error =", err)
 	}
@@ -2017,7 +2017,7 @@ func TestTagBytesN_Repository(t *testing.T) {
 	if !reflect.DeepEqual(gotDesc, indexDesc) {
 		t.Errorf("oras.TagBytes() = %v, want %v", gotDesc, indexDesc)
 	}
-	rc, err := repo.Fetch(ctx, gotDesc)
+	rc, err := repo.Fetch(ctx, gotDesc, 0, 0)
 	if err != nil {
 		t.Fatal("Repository.Fetch() error =", err)
 	}
@@ -2050,7 +2050,7 @@ func TestTagBytesN_Repository(t *testing.T) {
 			t.Fatalf("oras.TagBytes() = %v, want %v", gotDesc, indexDesc)
 		}
 	}
-	rc, err = repo.Fetch(ctx, gotDesc)
+	rc, err = repo.Fetch(ctx, gotDesc, 0, 0)
 	if err != nil {
 		t.Fatal("Repository.Fetch() error =", err)
 	}
@@ -2095,7 +2095,7 @@ func TestTagBytes(t *testing.T) {
 	if !reflect.DeepEqual(gotDesc, descTest) {
 		t.Fatalf("oras.TagBytes() = %v, want %v", gotDesc, descTest)
 	}
-	rc, err := s.Fetch(ctx, gotDesc)
+	rc, err := s.Fetch(ctx, gotDesc, 0, 0)
 	if err != nil {
 		t.Fatal("Memory.Fetch() error =", err)
 	}

@@ -39,7 +39,7 @@ func NewMemory() *Memory {
 }
 
 // Fetch fetches the content identified by the descriptor.
-func (m *Memory) Fetch(_ context.Context, target ocispec.Descriptor) (io.ReadCloser, error) {
+func (m *Memory) Fetch(_ context.Context, target ocispec.Descriptor, _, _ int64) (io.ReadCloser, error) {
 	key := descriptor.FromOCI(target)
 	content, exists := m.content.Load(key)
 	if !exists {

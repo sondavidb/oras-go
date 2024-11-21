@@ -62,7 +62,7 @@ func TestStorage_Success(t *testing.T) {
 		t.Errorf("Storage.Exists() = %v, want %v", exists, true)
 	}
 
-	rc, err := s.Fetch(ctx, desc)
+	rc, err := s.Fetch(ctx, desc, 0, 0)
 	if err != nil {
 		t.Fatal("Storage.Fetch() error =", err)
 	}
@@ -126,7 +126,7 @@ func TestStorage_RelativeRoot_Success(t *testing.T) {
 		t.Errorf("Storage.Exists() = %v, want %v", exists, true)
 	}
 
-	rc, err := s.Fetch(ctx, desc)
+	rc, err := s.Fetch(ctx, desc, 0, 0)
 	if err != nil {
 		t.Fatal("Storage.Fetch() error =", err)
 	}
@@ -166,7 +166,7 @@ func TestStorage_NotFound(t *testing.T) {
 		t.Errorf("Storage.Exists() = %v, want %v", exists, false)
 	}
 
-	_, err = s.Fetch(ctx, desc)
+	_, err = s.Fetch(ctx, desc, 0, 0)
 	if !errors.Is(err, errdef.ErrNotFound) {
 		t.Errorf("Storage.Fetch() error = %v, want %v", err, errdef.ErrNotFound)
 	}
@@ -262,7 +262,7 @@ func TestStorage_Push_Concurrent(t *testing.T) {
 		t.Errorf("Storage.Exists() = %v, want %v", exists, true)
 	}
 
-	rc, err := s.Fetch(ctx, desc)
+	rc, err := s.Fetch(ctx, desc, 0, 0)
 	if err != nil {
 		t.Fatal("Storage.Fetch() error =", err)
 	}
@@ -311,7 +311,7 @@ func TestStorage_Fetch_ExistingBlobs(t *testing.T) {
 		t.Errorf("Storage.Exists() = %v, want %v", exists, true)
 	}
 
-	rc, err := s.Fetch(ctx, desc)
+	rc, err := s.Fetch(ctx, desc, 0, 0)
 	if err != nil {
 		t.Fatal("Storage.Fetch() error =", err)
 	}
@@ -353,7 +353,7 @@ func TestStorage_Fetch_Concurrent(t *testing.T) {
 	for i := 0; i < concurrency; i++ {
 		eg.Go(func(i int) func() error {
 			return func() error {
-				rc, err := s.Fetch(egCtx, desc)
+				rc, err := s.Fetch(egCtx, desc, 0, 0)
 				if err != nil {
 					return fmt.Errorf("failed to fetch content: %v", err)
 				}

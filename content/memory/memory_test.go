@@ -90,7 +90,7 @@ func TestStoreSuccess(t *testing.T) {
 		t.Errorf("Store.Exists() = %v, want %v", exists, true)
 	}
 
-	rc, err := s.Fetch(ctx, desc)
+	rc, err := s.Fetch(ctx, desc, 0, 0)
 	if err != nil {
 		t.Fatal("Store.Fetch() error =", err)
 	}
@@ -130,7 +130,7 @@ func TestStoreContentNotFound(t *testing.T) {
 		t.Errorf("Store.Exists() = %v, want %v", exists, false)
 	}
 
-	_, err = s.Fetch(ctx, desc)
+	_, err = s.Fetch(ctx, desc, 0, 0)
 	if !errors.Is(err, errdef.ErrNotFound) {
 		t.Errorf("Store.Fetch() error = %v, want %v", err, errdef.ErrNotFound)
 	}

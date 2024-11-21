@@ -262,7 +262,7 @@ func Fetch(ctx context.Context, target ReadOnlyTarget, reference string, opts Fe
 		if err != nil {
 			return ocispec.Descriptor{}, nil, err
 		}
-		rc, err := target.Fetch(ctx, desc)
+		rc, err := target.Fetch(ctx, desc, 0, 0)
 		if err != nil {
 			return ocispec.Descriptor{}, nil, err
 		}
@@ -280,7 +280,7 @@ func Fetch(ctx context.Context, target ReadOnlyTarget, reference string, opts Fe
 	// if the content exists in cache, fetch it from cache
 	// otherwise fetch without caching
 	proxy.StopCaching = true
-	rc, err := proxy.Fetch(ctx, desc)
+	rc, err := proxy.Fetch(ctx, desc, 0, 0)
 	if err != nil {
 		return ocispec.Descriptor{}, nil, err
 	}

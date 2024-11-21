@@ -47,11 +47,11 @@ func (s *testStorage) Push(ctx context.Context, expected ocispec.Descriptor, rea
 	return s.store.Push(ctx, expected, reader)
 }
 
-func (s *testStorage) Fetch(ctx context.Context, target ocispec.Descriptor) (io.ReadCloser, error) {
+func (s *testStorage) Fetch(ctx context.Context, target ocispec.Descriptor, _, _ int64) (io.ReadCloser, error) {
 	if s.badFetch.Contains(target.Digest) {
 		return nil, ErrBadFetch
 	}
-	return s.store.Fetch(ctx, target)
+	return s.store.Fetch(ctx, target, 0, 0)
 }
 
 func (s *testStorage) Exists(ctx context.Context, target ocispec.Descriptor) (bool, error) {

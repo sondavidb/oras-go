@@ -273,8 +273,8 @@ func (r *Repository) blobStore(desc ocispec.Descriptor) registry.BlobStore {
 }
 
 // Fetch fetches the content identified by the descriptor.
-func (r *Repository) Fetch(ctx context.Context, target ocispec.Descriptor) (io.ReadCloser, error) {
-	return r.blobStore(target).Fetch(ctx, target)
+func (r *Repository) Fetch(ctx context.Context, target ocispec.Descriptor, start, end int64) (io.ReadCloser, error) {
+	return r.blobStore(target).Fetch(ctx, target, start, end)
 }
 
 // Push pushes the content, matching the expected descriptor.
@@ -718,7 +718,7 @@ type blobStore struct {
 }
 
 // Fetch fetches the content identified by the descriptor.
-func (s *blobStore) Fetch(ctx context.Context, target ocispec.Descriptor) (rc io.ReadCloser, err error) {
+func (s *blobStore) Fetch(ctx context.Context, target ocispec.Descriptor, start, end int64) (rc io.ReadCloser, err error) {
 	ref := s.repo.Reference
 	ref.Reference = target.Digest.String()
 	ctx = auth.AppendRepositoryScope(ctx, ref, auth.ActionPull)
@@ -726,6 +726,13 @@ func (s *blobStore) Fetch(ctx context.Context, target ocispec.Descriptor) (rc io
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, url, nil)
 	if err != nil {
 		return nil, err
+	}
+	expectedSize := target.Size
+	// Pull partial blob if specified
+	if end > 0 {
+		headerVal := fmt.Sprintf("bytes=%d-%d", start, end)
+		req.Header.Set("Range", headerVal)
+		expectedSize = end - start + 1
 	}
 
 	resp, err := s.repo.do(req)
@@ -739,8 +746,10 @@ func (s *blobStore) Fetch(ctx context.Context, target ocispec.Descriptor) (rc io
 	}()
 
 	switch resp.StatusCode {
+	case http.StatusPartialContent:
+		fallthrough
 	case http.StatusOK: // server does not support seek as `Range` was ignored.
-		if size := resp.ContentLength; size != -1 && size != target.Size {
+		if size := resp.ContentLength; size != -1 && size != expectedSize {
 			return nil, fmt.Errorf("%s %q: mismatch Content-Length", resp.Request.Method, resp.Request.URL)
 		}
 
@@ -807,7 +816,7 @@ func (s *blobStore) Mount(ctx context.Context, desc ocispec.Descriptor, fromRepo
 	if getContent != nil {
 		r, err = getContent()
 	} else {
-		r, err = s.sibling(fromRepo).Fetch(ctx, desc)
+		r, err = s.sibling(fromRepo).Fetch(ctx, desc, 0, 0)
 	}
 	if err != nil {
 		return fmt.Errorf("cannot read source blob: %w", err)
@@ -1049,7 +1058,7 @@ type manifestStore struct {
 }
 
 // Fetch fetches the content identified by the descriptor.
-func (s *manifestStore) Fetch(ctx context.Context, target ocispec.Descriptor) (rc io.ReadCloser, err error) {
+func (s *manifestStore) Fetch(ctx context.Context, target ocispec.Descriptor, _, _ int64) (rc io.ReadCloser, err error) {
 	ref := s.repo.Reference
 	ref.Reference = target.Digest.String()
 	ctx = auth.AppendRepositoryScope(ctx, ref, auth.ActionPull)
@@ -1255,7 +1264,7 @@ func (s *manifestStore) Tag(ctx context.Context, desc ocispec.Descriptor, refere
 	}
 
 	ctx = auth.AppendRepositoryScope(ctx, ref, auth.ActionPull, auth.ActionPush)
-	rc, err := s.Fetch(ctx, desc)
+	rc, err := s.Fetch(ctx, desc, 0, 0)
 	if err != nil {
 		return err
 	}
@@ -1310,7 +1319,7 @@ func (s *manifestStore) push(ctx context.Context, expected ocispec.Descriptor, c
 			return err
 		}
 		req.GetBody = func() (io.ReadCloser, error) {
-			return store.Fetch(ctx, expected)
+			return store.Fetch(ctx, expected, 0, 0)
 		}
 		req.Body, err = req.GetBody()
 		if err != nil {

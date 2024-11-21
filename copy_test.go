@@ -47,9 +47,9 @@ type storageTracker struct {
 	exists int64
 }
 
-func (t *storageTracker) Fetch(ctx context.Context, target ocispec.Descriptor) (io.ReadCloser, error) {
+func (t *storageTracker) Fetch(ctx context.Context, target ocispec.Descriptor, _, _ int64) (io.ReadCloser, error) {
 	atomic.AddInt64(&t.fetch, 1)
-	return t.Storage.Fetch(ctx, target)
+	return t.Storage.Fetch(ctx, target, 0, 0)
 }
 
 func (t *storageTracker) Push(ctx context.Context, expected ocispec.Descriptor, content io.Reader) error {
@@ -1441,7 +1441,7 @@ func TestCopyGraph_WithOptions(t *testing.T) {
 			PreCopy: func(ctx context.Context, desc ocispec.Descriptor) error {
 				if descs[1].Digest == desc.Digest {
 					// blob 1 is handled by us (really this would be a Mount but )
-					rc, err := src.Fetch(ctx, desc)
+					rc, err := src.Fetch(ctx, desc, 0, 0)
 					if err != nil {
 						t.Fatalf("Failed to fetch: %v", err)
 					}
@@ -1485,7 +1485,7 @@ func TestCopyGraph_WithOptions(t *testing.T) {
 			if expected := "source"; fromRepo != expected {
 				t.Fatalf("fromRepo = %v, want %v", fromRepo, expected)
 			}
-			rc, err := src.Fetch(ctx, desc)
+			rc, err := src.Fetch(ctx, desc, 0, 0)
 			if err != nil {
 				t.Fatalf("Failed to fetch content: %v", err)
 			}
@@ -1633,7 +1633,7 @@ func TestCopyGraph_WithOptions(t *testing.T) {
 			numMount.Add(1)
 			switch fromRepo {
 			case "source":
-				rc, err := src.Fetch(ctx, desc)
+				rc, err := src.Fetch(ctx, desc, 0, 0)
 				if err != nil {
 					t.Fatalf("Failed to fetch content: %v", err)
 				}
@@ -1817,7 +1817,7 @@ func TestCopyGraph_WithOptions(t *testing.T) {
 			if expected := "source"; fromRepo != expected {
 				t.Fatalf("fromRepo = %v, want %v", fromRepo, expected)
 			}
-			rc, err := src.Fetch(ctx, desc)
+			rc, err := src.Fetch(ctx, desc, 0, 0)
 			if err != nil {
 				t.Fatalf("Failed to fetch content: %v", err)
 			}
@@ -1891,9 +1891,9 @@ func (cs *countingStorage) Exists(ctx context.Context, target ocispec.Descriptor
 	return cs.storage.Exists(ctx, target)
 }
 
-func (cs *countingStorage) Fetch(ctx context.Context, target ocispec.Descriptor) (io.ReadCloser, error) {
+func (cs *countingStorage) Fetch(ctx context.Context, target ocispec.Descriptor, _, _ int64) (io.ReadCloser, error) {
 	cs.numFetch.Add(1)
-	return cs.storage.Fetch(ctx, target)
+	return cs.storage.Fetch(ctx, target, 0, 0)
 }
 
 func (cs *countingStorage) Push(ctx context.Context, target ocispec.Descriptor, r io.Reader) error {

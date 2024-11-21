@@ -74,8 +74,8 @@ func NewFromTar(ctx context.Context, path string) (*ReadOnlyStore, error) {
 }
 
 // Fetch fetches the content identified by the descriptor.
-func (s *ReadOnlyStore) Fetch(ctx context.Context, target ocispec.Descriptor) (io.ReadCloser, error) {
-	return s.storage.Fetch(ctx, target)
+func (s *ReadOnlyStore) Fetch(ctx context.Context, target ocispec.Descriptor, _, _ int64) (io.ReadCloser, error) {
+	return s.storage.Fetch(ctx, target, 0, 0)
 }
 
 // Exists returns true if the described content exists.

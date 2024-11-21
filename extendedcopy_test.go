@@ -1289,7 +1289,7 @@ func TestExtendedCopyGraph_FilterArtifactTypeWithMultipleRegex(t *testing.T) {
 			}
 		}
 		for _, i := range uncopiedIndice {
-			if _, err := dst.Fetch(ctx, descs[i]); !errors.Is(err, errdef.ErrNotFound) {
+			if _, err := dst.Fetch(ctx, descs[i], 0, 0); !errors.Is(err, errdef.ErrNotFound) {
 				t.Errorf("content[%d] error = %v, wantErr %v", i, err, errdef.ErrNotFound)
 			}
 		}
@@ -1625,7 +1625,7 @@ func TestExtendedCopyGraph_FilterArtifactTypeAndAnnotationWithMultipleRegex(t *t
 			}
 		}
 		for _, i := range uncopiedIndice {
-			if _, err := dst.Fetch(ctx, descs[i]); !errors.Is(err, errdef.ErrNotFound) {
+			if _, err := dst.Fetch(ctx, descs[i], 0, 0); !errors.Is(err, errdef.ErrNotFound) {
 				t.Errorf("content[%d] error = %v, wantErr %v", i, err, errdef.ErrNotFound)
 			}
 		}

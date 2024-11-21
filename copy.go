@@ -315,7 +315,7 @@ func mountOrCopyNode(ctx context.Context, src content.ReadOnlyStorage, dst conte
 					return nil, err
 				}
 			}
-			return src.Fetch(ctx, desc)
+			return src.Fetch(ctx, desc, 0, 0)
 		}
 
 		// Mount or copy
@@ -346,7 +346,7 @@ func mountOrCopyNode(ctx context.Context, src content.ReadOnlyStorage, dst conte
 
 // doCopyNode copies a single content from the source CAS to the destination CAS.
 func doCopyNode(ctx context.Context, src content.ReadOnlyStorage, dst content.Storage, desc ocispec.Descriptor) error {
-	rc, err := src.Fetch(ctx, desc)
+	rc, err := src.Fetch(ctx, desc, 0, 0)
 	if err != nil {
 		return err
 	}

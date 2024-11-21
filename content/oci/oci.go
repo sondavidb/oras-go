@@ -122,11 +122,11 @@ func NewWithContext(ctx context.Context, root string) (*Store, error) {
 // Fetch fetches the content identified by the descriptor. It returns an io.ReadCloser.
 // It's recommended to close the io.ReadCloser before a Delete operation, otherwise
 // Delete may fail (for example on NTFS file systems).
-func (s *Store) Fetch(ctx context.Context, target ocispec.Descriptor) (io.ReadCloser, error) {
+func (s *Store) Fetch(ctx context.Context, target ocispec.Descriptor, start, end int64) (io.ReadCloser, error) {
 	s.sync.RLock()
 	defer s.sync.RUnlock()
 
-	return s.storage.Fetch(ctx, target)
+	return s.storage.Fetch(ctx, target, start, end)
 }
 
 // Push pushes the content, matching the expected descriptor.
@@ -578,8 +578,8 @@ type unsafeStore struct {
 	*Store
 }
 
-func (s *unsafeStore) Fetch(ctx context.Context, target ocispec.Descriptor) (io.ReadCloser, error) {
-	return s.storage.Fetch(ctx, target)
+func (s *unsafeStore) Fetch(ctx context.Context, target ocispec.Descriptor, _, _ int64) (io.ReadCloser, error) {
+	return s.storage.Fetch(ctx, target, 0, 0)
 }
 
 func (s *unsafeStore) Predecessors(ctx context.Context, node ocispec.Descriptor) ([]ocispec.Descriptor, error) {

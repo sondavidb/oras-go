@@ -53,9 +53,9 @@ type storageTracker struct {
 	exists int64
 }
 
-func (t *storageTracker) Fetch(ctx context.Context, target ocispec.Descriptor) (io.ReadCloser, error) {
+func (t *storageTracker) Fetch(ctx context.Context, target ocispec.Descriptor, _, _ int64) (io.ReadCloser, error) {
 	atomic.AddInt64(&t.fetch, 1)
-	return t.Storage.Fetch(ctx, target)
+	return t.Storage.Fetch(ctx, target, 0, 0)
 }
 
 func (t *storageTracker) Push(ctx context.Context, expected ocispec.Descriptor, content io.Reader) error {
@@ -190,7 +190,7 @@ func TestStore_Success(t *testing.T) {
 		t.Errorf("Store.Exists() = %v, want %v", exists, true)
 	}
 
-	rc, err := s.Fetch(ctx, manifestDesc)
+	rc, err := s.Fetch(ctx, manifestDesc, 0, 0)
 	if err != nil {
 		t.Fatal("Store.Fetch() error =", err)
 	}
@@ -319,7 +319,7 @@ func TestStore_RelativeRoot_Success(t *testing.T) {
 		t.Errorf("Store.Exists() = %v, want %v", exists, true)
 	}
 
-	rc, err := s.Fetch(ctx, manifestDesc)
+	rc, err := s.Fetch(ctx, manifestDesc, 0, 0)
 	if err != nil {
 		t.Fatal("Store.Fetch() error =", err)
 	}
@@ -402,7 +402,7 @@ func TestStore_ContentNotFound(t *testing.T) {
 		t.Errorf("Store.Exists() = %v, want %v", exists, false)
 	}
 
-	_, err = s.Fetch(ctx, desc)
+	_, err = s.Fetch(ctx, desc, 0, 0)
 	if !errors.Is(err, errdef.ErrNotFound) {
 		t.Errorf("Store.Fetch() error = %v, want %v", err, errdef.ErrNotFound)
 	}
@@ -1240,7 +1240,7 @@ func TestStore_ExistingStore(t *testing.T) {
 	for i := range blobs {
 		eg.Go(func(i int) func() error {
 			return func() error {
-				rc, err := s.Fetch(egCtx, descs[i])
+				rc, err := s.Fetch(egCtx, descs[i], 0, 0)
 				if err != nil {
 					return fmt.Errorf("Store.Fetch(%d) error = %v", i, err)
 				}
@@ -2078,7 +2078,7 @@ func TestStore_FetchAndDelete(t *testing.T) {
 	}
 
 	// fetch a content
-	rc, err := s.Fetch(context.Background(), desc)
+	rc, err := s.Fetch(context.Background(), desc, 0, 0)
 	if err != nil {
 		t.Fatal("error =", err)
 	}

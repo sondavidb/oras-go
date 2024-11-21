@@ -274,7 +274,7 @@ func (opts *ExtendedCopyGraphOptions) FilterAnnotation(key string, regex *regexp
 
 // fetchAnnotations fetches the annotations of the manifest described by desc.
 func fetchAnnotations(ctx context.Context, src content.ReadOnlyGraphStorage, desc ocispec.Descriptor) (map[string]string, error) {
-	rc, err := src.Fetch(ctx, desc)
+	rc, err := src.Fetch(ctx, desc, 0, 0)
 	if err != nil {
 		return nil, err
 	}
@@ -364,7 +364,7 @@ func (opts *ExtendedCopyGraphOptions) FilterArtifactType(regex *regexp.Regexp) {
 
 // fetchArtifactType fetches the artifact type of the manifest described by desc.
 func fetchArtifactType(ctx context.Context, src content.ReadOnlyGraphStorage, desc ocispec.Descriptor) (string, error) {
-	rc, err := src.Fetch(ctx, desc)
+	rc, err := src.Fetch(ctx, desc, 0, 0)
 	if err != nil {
 		return "", err
 	}

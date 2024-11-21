@@ -130,7 +130,7 @@ func getPlatformFromConfig(ctx context.Context, src content.ReadOnlyStorage, des
 		return nil, fmt.Errorf("fail to recognize platform from unknown config %s: expect %s", desc.MediaType, targetConfigMediaType)
 	}
 
-	rc, err := src.Fetch(ctx, desc)
+	rc, err := src.Fetch(ctx, desc, 0, 0)
 	if err != nil {
 		return nil, err
 	}

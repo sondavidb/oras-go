@@ -175,7 +175,7 @@ func TestRepository_Fetch(t *testing.T) {
 	repo.PlainHTTP = true
 	ctx := context.Background()
 
-	rc, err := repo.Fetch(ctx, blobDesc)
+	rc, err := repo.Fetch(ctx, blobDesc, 0, 0)
 	if err != nil {
 		t.Fatalf("Repository.Fetch() error = %v", err)
 	}
@@ -190,7 +190,7 @@ func TestRepository_Fetch(t *testing.T) {
 		t.Errorf("Repository.Fetch() = %v, want %v", got, blob)
 	}
 
-	rc, err = repo.Fetch(ctx, indexDesc)
+	rc, err = repo.Fetch(ctx, indexDesc, 0, 0)
 	if err != nil {
 		t.Fatalf("Repository.Fetch() error = %v", err)
 	}
@@ -2495,7 +2495,7 @@ func Test_BlobStore_Fetch(t *testing.T) {
 	store := repo.Blobs()
 	ctx := context.Background()
 
-	rc, err := store.Fetch(ctx, blobDesc)
+	rc, err := store.Fetch(ctx, blobDesc, 0, 0)
 	if err != nil {
 		t.Fatalf("Blobs.Fetch() error = %v", err)
 	}
@@ -2516,7 +2516,7 @@ func Test_BlobStore_Fetch(t *testing.T) {
 		Digest:    digest.FromBytes(content),
 		Size:      int64(len(content)),
 	}
-	_, err = store.Fetch(ctx, contentDesc)
+	_, err = store.Fetch(ctx, contentDesc, 0, 0)
 	if !errors.Is(err, errdef.ErrNotFound) {
 		t.Errorf("Blobs.Fetch() error = %v, wantErr %v", err, errdef.ErrNotFound)
 	}
@@ -2589,7 +2589,7 @@ func Test_BlobStore_Fetch_Seek(t *testing.T) {
 	store := repo.Blobs()
 	ctx := context.Background()
 
-	rc, err := store.Fetch(ctx, blobDesc)
+	rc, err := store.Fetch(ctx, blobDesc, 0, 0)
 	if err != nil {
 		t.Fatalf("Blobs.Fetch() error = %v", err)
 	}
@@ -2608,7 +2608,7 @@ func Test_BlobStore_Fetch_Seek(t *testing.T) {
 	}
 
 	seekable = true
-	rc, err = store.Fetch(ctx, blobDesc)
+	rc, err = store.Fetch(ctx, blobDesc, 0, 0)
 	if err != nil {
 		t.Fatalf("Blobs.Fetch() error = %v", err)
 	}
@@ -2682,7 +2682,7 @@ func Test_BlobStore_Fetch_ZeroSizedBlob(t *testing.T) {
 	store := repo.Blobs()
 	ctx := context.Background()
 
-	rc, err := store.Fetch(ctx, blobDesc)
+	rc, err := store.Fetch(ctx, blobDesc, 0, 0)
 	if err != nil {
 		t.Fatalf("Blobs.Fetch() error = %v", err)
 	}
@@ -3285,7 +3285,7 @@ func Test_ManifestStore_Fetch(t *testing.T) {
 	store := repo.Manifests()
 	ctx := context.Background()
 
-	rc, err := store.Fetch(ctx, manifestDesc)
+	rc, err := store.Fetch(ctx, manifestDesc, 0, 0)
 	if err != nil {
 		t.Fatalf("Manifests.Fetch() error = %v", err)
 	}
@@ -3306,7 +3306,7 @@ func Test_ManifestStore_Fetch(t *testing.T) {
 		Digest:    digest.FromBytes(content),
 		Size:      int64(len(content)),
 	}
-	_, err = store.Fetch(ctx, contentDesc)
+	_, err = store.Fetch(ctx, contentDesc, 0, 0)
 	if !errors.Is(err, errdef.ErrNotFound) {
 		t.Errorf("Manifests.Fetch() error = %v, wantErr %v", err, errdef.ErrNotFound)
 	}

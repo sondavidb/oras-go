@@ -185,7 +185,7 @@ func (s *Store) Close() error {
 }
 
 // Fetch fetches the content identified by the descriptor.
-func (s *Store) Fetch(ctx context.Context, target ocispec.Descriptor) (io.ReadCloser, error) {
+func (s *Store) Fetch(ctx context.Context, target ocispec.Descriptor, _, _ int64) (io.ReadCloser, error) {
 	if s.isClosedSet() {
 		return nil, ErrStoreClosed
 	}
@@ -214,7 +214,7 @@ func (s *Store) Fetch(ctx context.Context, target ocispec.Descriptor) (io.ReadCl
 
 	// if the content does not exist in the store,
 	// then fall back to the fallback storage.
-	return s.fallbackStorage.Fetch(ctx, target)
+	return s.fallbackStorage.Fetch(ctx, target, 0, 0)
 }
 
 // Push pushes the content, matching the expected descriptor.
@@ -302,7 +302,7 @@ func (s *Store) restoreDuplicates(ctx context.Context, desc ocispec.Descriptor) 
 				Digest:    successor.Digest,
 				Size:      successor.Size,
 			}
-			rc, err := s.Fetch(ctx, desc)
+			rc, err := s.Fetch(ctx, desc, 0, 0)
 			if err != nil {
 				return fmt.Errorf("%q: %s: %w", name, desc.MediaType, err)
 			}

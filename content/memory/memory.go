@@ -46,8 +46,8 @@ func New() *Store {
 }
 
 // Fetch fetches the content identified by the descriptor.
-func (s *Store) Fetch(ctx context.Context, target ocispec.Descriptor) (io.ReadCloser, error) {
-	return s.storage.Fetch(ctx, target)
+func (s *Store) Fetch(ctx context.Context, target ocispec.Descriptor, _, _ int64) (io.ReadCloser, error) {
+	return s.storage.Fetch(ctx, target, 0, 0)
 }
 
 // Push pushes the content, matching the expected descriptor.

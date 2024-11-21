@@ -51,9 +51,9 @@ type storageTracker struct {
 	exists int64
 }
 
-func (t *storageTracker) Fetch(ctx context.Context, target ocispec.Descriptor) (io.ReadCloser, error) {
+func (t *storageTracker) Fetch(ctx context.Context, target ocispec.Descriptor, _, _ int64) (io.ReadCloser, error) {
 	atomic.AddInt64(&t.fetch, 1)
-	return t.Storage.Fetch(ctx, target)
+	return t.Storage.Fetch(ctx, target, 0, 0)
 }
 
 func (t *storageTracker) Push(ctx context.Context, expected ocispec.Descriptor, content io.Reader) error {
@@ -121,7 +121,7 @@ func TestStore_Success(t *testing.T) {
 	}
 
 	// test blob fetch
-	rc, err := s.Fetch(ctx, gotDesc)
+	rc, err := s.Fetch(ctx, gotDesc, 0, 0)
 	if err != nil {
 		t.Fatal("Store.Fetch() error =", err)
 	}
@@ -196,7 +196,7 @@ func TestStore_Success(t *testing.T) {
 		t.Errorf("Store.Exists() = %v, want %v", exists, true)
 	}
 
-	mrc, err := s.Fetch(ctx, gotManifestDesc)
+	mrc, err := s.Fetch(ctx, gotManifestDesc, 0, 0)
 	if err != nil {
 		t.Fatal("Store.Fetch() error =", err)
 	}
@@ -275,7 +275,7 @@ func TestStore_RelativeRoot_Success(t *testing.T) {
 	}
 
 	// test blob fetch
-	rc, err := s.Fetch(ctx, gotDesc)
+	rc, err := s.Fetch(ctx, gotDesc, 0, 0)
 	if err != nil {
 		t.Fatal("Store.Fetch() error =", err)
 	}
@@ -350,7 +350,7 @@ func TestStore_RelativeRoot_Success(t *testing.T) {
 		t.Errorf("Store.Exists() = %v, want %v", exists, true)
 	}
 
-	mrc, err := s.Fetch(ctx, gotManifestDesc)
+	mrc, err := s.Fetch(ctx, gotManifestDesc, 0, 0)
 	if err != nil {
 		t.Fatal("Store.Fetch() error =", err)
 	}
@@ -404,7 +404,7 @@ func TestStore_Close(t *testing.T) {
 	}
 
 	// test fetch
-	rc, err := s.Fetch(ctx, desc)
+	rc, err := s.Fetch(ctx, desc, 0, 0)
 	if err != nil {
 		t.Fatal("Store.Fetch() error =", err)
 	}
@@ -455,7 +455,7 @@ func TestStore_Close(t *testing.T) {
 	}
 
 	// test fetch after closed
-	if _, err := s.Fetch(ctx, desc); !errors.Is(err, ErrStoreClosed) {
+	if _, err := s.Fetch(ctx, desc, 0, 0); !errors.Is(err, ErrStoreClosed) {
 		t.Errorf("Store.Fetch() = %v, want %v", err, ErrStoreClosed)
 	}
 
@@ -499,7 +499,7 @@ func TestStore_File_Push(t *testing.T) {
 	}
 
 	// test fetch
-	rc, err := s.Fetch(ctx, desc)
+	rc, err := s.Fetch(ctx, desc, 0, 0)
 	if err != nil {
 		t.Fatal("Store.Fetch() error =", err)
 	}
@@ -584,7 +584,7 @@ func TestStore_Dir_Push(t *testing.T) {
 	}
 
 	// test fetch
-	rc, err := s.Fetch(ctx, desc)
+	rc, err := s.Fetch(ctx, desc, 0, 0)
 	if err != nil {
 		t.Fatal("Store.Fetch() error =", err)
 	}
@@ -734,7 +734,7 @@ func TestStore_Push_NoName(t *testing.T) {
 	}
 
 	// test fetch
-	rc, err := s.Fetch(ctx, desc)
+	rc, err := s.Fetch(ctx, desc, 0, 0)
 	if err != nil {
 		t.Fatal("Store.Fetch() error =", err)
 	}
@@ -824,7 +824,7 @@ func TestStore_File_NotFound(t *testing.T) {
 		t.Errorf("Store.Exists() = %v, want %v", exists, false)
 	}
 
-	_, err = s.Fetch(ctx, desc)
+	_, err = s.Fetch(ctx, desc, 0, 0)
 	if !errors.Is(err, errdef.ErrNotFound) {
 		t.Errorf("Store.Fetch() error = %v, want %v", err, errdef.ErrNotFound)
 	}
@@ -900,7 +900,7 @@ func TestStore_File_Add(t *testing.T) {
 	}
 
 	// test fetch
-	rc, err := s.Fetch(ctx, gotDesc)
+	rc, err := s.Fetch(ctx, gotDesc, 0, 0)
 	if err != nil {
 		t.Fatal("Store.Fetch() error =", err)
 	}
@@ -967,7 +967,7 @@ func TestStore_Dir_Add(t *testing.T) {
 	}
 
 	// test fetch
-	rc, err := s.Fetch(ctx, gotDesc)
+	rc, err := s.Fetch(ctx, gotDesc, 0, 0)
 	if err != nil {
 		t.Fatal("Store.Fetch() error =", err)
 	}
@@ -1028,7 +1028,7 @@ func TestStore_File_SameContent_DuplicateName(t *testing.T) {
 	}
 
 	// test fetch
-	rc, err := s.Fetch(ctx, gotDesc)
+	rc, err := s.Fetch(ctx, gotDesc, 0, 0)
 	if err != nil {
 		t.Fatal("Store.Fetch() error =", err)
 	}
@@ -1100,7 +1100,7 @@ func TestStore_File_DifferentContent_DuplicateName(t *testing.T) {
 	}
 
 	// test fetch
-	rc, err := s.Fetch(ctx, gotDesc)
+	rc, err := s.Fetch(ctx, gotDesc, 0, 0)
 	if err != nil {
 		t.Fatal("Store.Fetch() error =", err)
 	}
@@ -1228,7 +1228,7 @@ func TestStore_File_Add_SameContent(t *testing.T) {
 	}
 
 	// test fetch
-	rc_1, err := s.Fetch(ctx, gotDesc_1)
+	rc_1, err := s.Fetch(ctx, gotDesc_1, 0, 0)
 	if err != nil {
 		t.Fatal("Store.Fetch() error =", err)
 	}
@@ -1244,7 +1244,7 @@ func TestStore_File_Add_SameContent(t *testing.T) {
 		t.Errorf("Store.Fetch() = %v, want %v", got_1, content)
 	}
 
-	rc_2, err := s.Fetch(ctx, gotDesc_2)
+	rc_2, err := s.Fetch(ctx, gotDesc_2, 0, 0)
 	if err != nil {
 		t.Fatal("Store.Fetch() error =", err)
 	}
@@ -1319,7 +1319,7 @@ func TestStore_File_Push_SameContent(t *testing.T) {
 	}
 
 	// test fetch
-	rc_1, err := s.Fetch(ctx, desc_1)
+	rc_1, err := s.Fetch(ctx, desc_1, 0, 0)
 	if err != nil {
 		t.Fatal("Store.Fetch() error =", err)
 	}
@@ -1335,7 +1335,7 @@ func TestStore_File_Push_SameContent(t *testing.T) {
 		t.Errorf("Store.Fetch() = %v, want %v", got_1, content)
 	}
 
-	rc_2, err := s.Fetch(ctx, desc_2)
+	rc_2, err := s.Fetch(ctx, desc_2, 0, 0)
 	if err != nil {
 		t.Fatal("Store.Fetch() error =", err)
 	}
@@ -1398,7 +1398,7 @@ func TestStore_File_Push_DuplicateName(t *testing.T) {
 	}
 
 	// test fetch
-	rc, err := s.Fetch(ctx, desc_1)
+	rc, err := s.Fetch(ctx, desc_1, 0, 0)
 	if err != nil {
 		t.Fatal("Store.Fetch() error =", err)
 	}
@@ -1552,7 +1552,7 @@ func TestStore_File_Push_RestoreDuplicates(t *testing.T) {
 	if !exists {
 		t.Error("Blob2 is not restored")
 	}
-	rc, err := s.Fetch(ctx, desc2)
+	rc, err := s.Fetch(ctx, desc2, 0, 0)
 	if err != nil {
 		t.Fatal("Store.Fetch() error =", err)
 	}
@@ -1620,13 +1620,13 @@ type storageMock struct {
 	OnFetch func(ctx context.Context, desc ocispec.Descriptor) error
 }
 
-func (m *storageMock) Fetch(ctx context.Context, desc ocispec.Descriptor) (io.ReadCloser, error) {
+func (m *storageMock) Fetch(ctx context.Context, desc ocispec.Descriptor, _, _ int64) (io.ReadCloser, error) {
 	if m.OnFetch != nil {
 		if err := m.OnFetch(ctx, desc); err != nil {
 			return nil, err
 		}
 	}
-	return m.Storage.Fetch(ctx, desc)
+	return m.Storage.Fetch(ctx, desc, 0, 0)
 }
 
 func TestStore_File_Push_RestoreDuplicates_DuplicateName(t *testing.T) {
@@ -1809,7 +1809,7 @@ func TestStore_File_Fetch_SameDigest_NoName(t *testing.T) {
 	}
 
 	// test fetch
-	rc_1, err := s.Fetch(ctx, desc_1)
+	rc_1, err := s.Fetch(ctx, desc_1, 0, 0)
 	if err != nil {
 		t.Fatal("Store.Fetch() error =", err)
 	}
@@ -1825,7 +1825,7 @@ func TestStore_File_Fetch_SameDigest_NoName(t *testing.T) {
 		t.Errorf("Store.Fetch() = %v, want %v", got_1, content)
 	}
 
-	rc_2, err := s.Fetch(ctx, desc_2)
+	rc_2, err := s.Fetch(ctx, desc_2, 0, 0)
 	if err != nil {
 		t.Fatal("Store.Fetch() error =", err)
 	}
@@ -1887,7 +1887,7 @@ func TestStore_File_Fetch_SameDigest_DifferentName(t *testing.T) {
 		t.Errorf("Store.Exists() = %v, want %v", exists, true)
 	}
 
-	rc_1, err := s.Fetch(ctx, desc_1)
+	rc_1, err := s.Fetch(ctx, desc_1, 0, 0)
 	if err != nil {
 		t.Fatal("Store.Fetch() error =", err)
 	}
@@ -1912,7 +1912,7 @@ func TestStore_File_Fetch_SameDigest_DifferentName(t *testing.T) {
 		t.Errorf("Store.Exists() = %v, want %v", exists, false)
 	}
 
-	_, err = s.Fetch(ctx, desc_2)
+	_, err = s.Fetch(ctx, desc_2, 0, 0)
 	if !errors.Is(err, errdef.ErrNotFound) {
 		t.Errorf("Store.Fetch() error = %v, want %v", err, errdef.ErrNotFound)
 	}
@@ -1961,7 +1961,7 @@ func TestStore_File_Push_Overwrite(t *testing.T) {
 	}
 
 	// test fetch
-	rc, err := s.Fetch(ctx, desc)
+	rc, err := s.Fetch(ctx, desc, 0, 0)
 	if err != nil {
 		t.Fatal("Store.Fetch() error =", err)
 	}
@@ -2192,7 +2192,7 @@ func TestStore_File_Push_PathTraversal(t *testing.T) {
 	}
 
 	// test fetch
-	rc, err := s.Fetch(ctx, desc)
+	rc, err := s.Fetch(ctx, desc, 0, 0)
 	if err != nil {
 		t.Fatal("Store.Fetch() error =", err)
 	}
@@ -2256,7 +2256,7 @@ func TestStore_File_Push_Concurrent(t *testing.T) {
 		t.Errorf("Store.Exists() = %v, want %v", exists, true)
 	}
 
-	rc, err := s.Fetch(ctx, desc)
+	rc, err := s.Fetch(ctx, desc, 0, 0)
 	if err != nil {
 		t.Fatal("Store.Fetch() error =", err)
 	}
@@ -2302,7 +2302,7 @@ func TestStore_File_Fetch_Concurrent(t *testing.T) {
 	for i := 0; i < concurrency; i++ {
 		eg.Go(func(i int) func() error {
 			return func() error {
-				rc, err := s.Fetch(egCtx, desc)
+				rc, err := s.Fetch(egCtx, desc, 0, 0)
 				if err != nil {
 					return fmt.Errorf("failed to fetch content: %v", err)
 				}

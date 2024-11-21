@@ -54,7 +54,7 @@ func NewStorageFromTar(path string) (*ReadOnlyStorage, error) {
 }
 
 // Fetch fetches the content identified by the descriptor.
-func (s *ReadOnlyStorage) Fetch(_ context.Context, target ocispec.Descriptor) (io.ReadCloser, error) {
+func (s *ReadOnlyStorage) Fetch(_ context.Context, target ocispec.Descriptor, _, _ int64) (io.ReadCloser, error) {
 	path, err := blobPath(target.Digest)
 	if err != nil {
 		return nil, fmt.Errorf("%s: %s: %w", target.Digest, target.MediaType, errdef.ErrInvalidDigest)

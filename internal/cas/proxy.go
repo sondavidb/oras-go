@@ -55,17 +55,17 @@ func NewProxyWithLimit(base content.ReadOnlyStorage, cache content.Storage, push
 }
 
 // Fetch fetches the content identified by the descriptor.
-func (p *Proxy) Fetch(ctx context.Context, target ocispec.Descriptor) (io.ReadCloser, error) {
+func (p *Proxy) Fetch(ctx context.Context, target ocispec.Descriptor, _, _ int64) (io.ReadCloser, error) {
 	if p.StopCaching {
 		return p.FetchCached(ctx, target)
 	}
 
-	rc, err := p.Cache.Fetch(ctx, target)
+	rc, err := p.Cache.Fetch(ctx, target, 0, 0)
 	if err == nil {
 		return rc, nil
 	}
 
-	rc, err = p.ReadOnlyStorage.Fetch(ctx, target)
+	rc, err = p.ReadOnlyStorage.Fetch(ctx, target, 0, 0)
 	if err != nil {
 		return nil, err
 	}
@@ -110,9 +110,9 @@ func (p *Proxy) FetchCached(ctx context.Context, target ocispec.Descriptor) (io.
 		return nil, err
 	}
 	if exists {
-		return p.Cache.Fetch(ctx, target)
+		return p.Cache.Fetch(ctx, target, 0, 0)
 	}
-	return p.ReadOnlyStorage.Fetch(ctx, target)
+	return p.ReadOnlyStorage.Fetch(ctx, target, 0, 0)
 }
 
 // Exists returns true if the described content exists.

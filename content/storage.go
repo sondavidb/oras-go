@@ -25,7 +25,7 @@ import (
 // Fetcher fetches content.
 type Fetcher interface {
 	// Fetch fetches the content identified by the descriptor.
-	Fetch(ctx context.Context, target ocispec.Descriptor) (io.ReadCloser, error)
+	Fetch(ctx context.Context, target ocispec.Descriptor, start, end int64) (io.ReadCloser, error)
 }
 
 // Pusher pushes content.
@@ -63,7 +63,7 @@ type Deleter interface {
 // FetchAll safely fetches the content described by the descriptor.
 // The fetched content is verified against the size and the digest.
 func FetchAll(ctx context.Context, fetcher Fetcher, desc ocispec.Descriptor) ([]byte, error) {
-	rc, err := fetcher.Fetch(ctx, desc)
+	rc, err := fetcher.Fetch(ctx, desc, 0, 0)
 	if err != nil {
 		return nil, err
 	}
@@ -75,6 +75,6 @@ func FetchAll(ctx context.Context, fetcher Fetcher, desc ocispec.Descriptor) ([]
 type FetcherFunc func(ctx context.Context, target ocispec.Descriptor) (io.ReadCloser, error)
 
 // Fetch performs Fetch operation by the FetcherFunc.
-func (fn FetcherFunc) Fetch(ctx context.Context, target ocispec.Descriptor) (io.ReadCloser, error) {
+func (fn FetcherFunc) Fetch(ctx context.Context, target ocispec.Descriptor, _, _ int64) (io.ReadCloser, error) {
 	return fn(ctx, target)
 }

@@ -88,7 +88,7 @@ func TestMemory_IndexAndRemove(t *testing.T) {
 	}
 
 	// make sure that testFetcher works
-	rc, err := testFetcher.Fetch(ctx, descA)
+	rc, err := testFetcher.Fetch(ctx, descA, 0, 0)
 	if err != nil {
 		t.Errorf("testFetcher.Fetch() error = %v", err)
 	}
@@ -376,7 +376,7 @@ func TestMemory_IndexAllAndPredecessors(t *testing.T) {
 	}
 
 	// make sure that testFetcher works
-	rc, err := testFetcher.Fetch(ctx, descA)
+	rc, err := testFetcher.Fetch(ctx, descA, 0, 0)
 	if err != nil {
 		t.Errorf("testFetcher.Fetch() error = %v", err)
 	}
@@ -663,7 +663,7 @@ func TestMemory_DigestSet(t *testing.T) {
 	}
 
 	// make sure that testFetcher works
-	rc, err := testFetcher.Fetch(ctx, descA)
+	rc, err := testFetcher.Fetch(ctx, descA, 0, 0)
 	if err != nil {
 		t.Errorf("testFetcher.Fetch() error = %v", err)
 	}
@@ -741,7 +741,7 @@ func TestMemory_Exists(t *testing.T) {
 	}
 
 	// make sure that testFetcher works
-	rc, err := testFetcher.Fetch(ctx, descA)
+	rc, err := testFetcher.Fetch(ctx, descA, 0, 0)
 	if err != nil {
 		t.Errorf("testFetcher.Fetch() error = %v", err)
 	}

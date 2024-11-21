@@ -52,7 +52,7 @@ func TestProxyCache(t *testing.T) {
 	if !exists {
 		t.Errorf("Proxy.Exists() = %v, want %v", exists, true)
 	}
-	rc, err := s.Fetch(ctx, desc)
+	rc, err := s.Fetch(ctx, desc, 0, 0)
 	if err != nil {
 		t.Fatal("Proxy.Fetch() error =", err)
 	}
@@ -79,7 +79,7 @@ func TestProxyCache(t *testing.T) {
 	if !exists {
 		t.Errorf("Proxy.Exists() = %v, want %v", exists, true)
 	}
-	rc, err = s.Fetch(ctx, desc)
+	rc, err = s.Fetch(ctx, desc, 0, 0)
 	if err != nil {
 		t.Fatal("Proxy.Fetch() error =", err)
 	}
@@ -171,7 +171,7 @@ func TestProxy_FetchCached_CachedContent(t *testing.T) {
 	if !exists {
 		t.Errorf("Proxy.Exists() = %v, want %v", exists, true)
 	}
-	rc, err := s.Fetch(ctx, desc)
+	rc, err := s.Fetch(ctx, desc, 0, 0)
 	if err != nil {
 		t.Fatal("Proxy.Fetch() error =", err)
 	}
@@ -242,7 +242,7 @@ func TestProxy_StopCaching(t *testing.T) {
 
 	// test StopCaching
 	s.StopCaching = true
-	rc, err := s.Fetch(ctx, desc)
+	rc, err := s.Fetch(ctx, desc, 0, 0)
 	if err != nil {
 		t.Fatal("Proxy.Fetch() error =", err)
 	}
@@ -293,7 +293,7 @@ func TestProxyWithLimit_WithinLimit(t *testing.T) {
 	if !exists {
 		t.Errorf("Proxy.Exists() = %v, want %v", exists, true)
 	}
-	rc, err := s.Fetch(ctx, desc)
+	rc, err := s.Fetch(ctx, desc, 0, 0)
 	if err != nil {
 		t.Fatal("Proxy.Fetch() error =", err)
 	}
@@ -320,7 +320,7 @@ func TestProxyWithLimit_WithinLimit(t *testing.T) {
 	if !exists {
 		t.Errorf("Proxy.Exists() = %v, want %v", exists, true)
 	}
-	rc, err = s.Fetch(ctx, desc)
+	rc, err = s.Fetch(ctx, desc, 0, 0)
 	if err != nil {
 		t.Fatal("Proxy.Fetch() error =", err)
 	}
@@ -361,7 +361,7 @@ func TestProxyWithLimit_ExceedsLimit(t *testing.T) {
 	if !exists {
 		t.Errorf("Proxy.Exists() = %v, want %v", exists, true)
 	}
-	rc, err := s.Fetch(ctx, desc)
+	rc, err := s.Fetch(ctx, desc, 0, 0)
 	if err != nil {
 		t.Fatal("Proxy.Fetch() error =", err)
 	}

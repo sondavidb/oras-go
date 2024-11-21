@@ -421,7 +421,7 @@ func ExampleRepository_Fetch_manifestByTag() {
 	if err != nil {
 		panic(err)
 	}
-	rc, err := repo.Fetch(ctx, descriptor)
+	rc, err := repo.Fetch(ctx, descriptor, 0, 0)
 	if err != nil {
 		panic(err)
 	}
@@ -451,7 +451,7 @@ func ExampleRepository_Fetch_manifestByDigest() {
 	if err != nil {
 		panic(err)
 	}
-	rc, err := repo.Fetch(ctx, descriptor)
+	rc, err := repo.Fetch(ctx, descriptor, 0, 0)
 	if err != nil {
 		panic(err)
 	}
@@ -486,7 +486,7 @@ func ExampleRepository_Fetch_artifactReferenceManifest() {
 		// for each page of the results, do the following:
 		for _, referrer := range referrers {
 			// for each item in this page, pull the manifest and verify its content
-			rc, err := repo.Fetch(ctx, referrer)
+			rc, err := repo.Fetch(ctx, referrer, 0, 0)
 			if err != nil {
 				panic(err)
 			}
@@ -609,7 +609,7 @@ func ExampleRepository_Fetch_layer() {
 	if err != nil {
 		panic(err)
 	}
-	rc, err := repo.Fetch(ctx, descriptor)
+	rc, err := repo.Fetch(ctx, descriptor, 0, 0)
 	if err != nil {
 		panic(err)
 	}
